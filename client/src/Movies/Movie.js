@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useRouteMatch, useHistory } from 'react-router-dom';
-import { Route } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
 function Movie(props, { addToSavedList }) {
 	const [movie, setMovie] = useState(null);
-	const params = useParams();
 	const match = useRouteMatch();
 	const history = useHistory();
 
@@ -32,6 +30,10 @@ function Movie(props, { addToSavedList }) {
 		e.preventDefault();
 		history.push(`/update-movie/${movie.id}`);
 	};
+	const deleteHandler = (e) => {
+		e.preventDefault();
+		props.deleteMovie(movie.id);
+	};
 
 	return (
 		<div className="save-wrapper">
@@ -42,8 +44,10 @@ function Movie(props, { addToSavedList }) {
 			</div>
 
 			<button type="submit" onClick={routeToUpdate}>
-				{' '}
 				Update
+			</button>
+			<button type="submit" onclick={deleteHandler}>
+				Delete
 			</button>
 		</div>
 	);

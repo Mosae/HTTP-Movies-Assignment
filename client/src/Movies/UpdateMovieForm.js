@@ -11,17 +11,20 @@ const initialMovie = {
 };
 
 const UpdateForm = (props) => {
+	console.log('These are props received', props);
 	const { push } = useHistory();
-	const { updateMovie, setUpdateMovie } = useState(initialMovie);
+	const [updateMovie, setUpdateMovie] = useState(initialMovie);
+	console.log('update movie', updateMovie);
 	const { id } = useParams();
+
 	useEffect(() => {
-		axios
-			.get(`http://localhost:5000/api/movies/update-movie/${id}`)
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => console.log(err));
-	}, [id]);
+		const editingMovie = props.movies.find((film) => {
+			return film.id === Number(props.match.params.id);
+		});
+		if (editingMovie) {
+			setUpdateMovie(editingMovie);
+		}
+	}, [props.movies, props.match.params]);
 
 	const changeHandler = (e) => {
 		e.persist();
@@ -37,12 +40,12 @@ const UpdateForm = (props) => {
 		e.preventDefault();
 		// make a PUT request to edit the updateMovie
 		axios
-			.put('/update-movie/:id', updateMovie)
+			.put(`http://localhost:5000/api/movies/${id}`, updateMovie)
 			.then((res) => {
-				console.log(res);
+				console.log('45', res);
 				// res.data
-				props.setItems(res.data);
-				push(`/update-movie/${id}`);
+				props.updateMovieList(id, res.data);
+				push(`/movies/${id}`);
 
 				// res.data ==> just updated updateMovie object
 			})
@@ -55,10 +58,10 @@ const UpdateForm = (props) => {
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"
-					name="name"
+					name="title"
 					onChange={changeHandler}
 					placeholder="Movie Name"
-					value={updateMovie.name}
+					value={updateMovie.title}
 				/>
 
 				<div>
@@ -81,14 +84,14 @@ const UpdateForm = (props) => {
 				</div>
 				<div>
 					<input
-						type="array"
+						type="text"
 						name="stars"
 						onChange={changeHandler}
 						placeholder="Stars"
 						value={updateMovie.stars}
 					/>
 				</div>
-				<button className="md-button">Update Movie</button>
+				<button className="lg-button">Update Movie</button>
 			</form>
 		</div>
 	);
