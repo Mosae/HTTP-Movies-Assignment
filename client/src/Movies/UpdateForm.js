@@ -12,7 +12,7 @@ const initialMovie = {
 
 const UpdateForm = (props) => {
 	const { push } = useHistory();
-	const { item, setItem } = useState(initialMovie);
+	const { updateMovie, setUpdateMovie } = useState(initialMovie);
 	const { id } = useParams();
 	useEffect(() => {
 		axios
@@ -25,25 +25,26 @@ const UpdateForm = (props) => {
 
 	const changeHandler = (e) => {
 		e.persist();
+		setUpdateMovie({ ...updateMovie, [e.target.name]: e.target.value });
+
 		// let value = e.target.value;
-		// value = parseInt(value, 5);
+		// if (ev.target.name === 'movie') {
+		// 	value = parseInt(value, 10);
+		// }
 	};
-	setItem({
-		...item,
-		// [e.target.name]: value,
-	});
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		// make a PUT request to edit the item
+		// make a PUT request to edit the updateMovie
 		axios
-			.put(`http://localhost:5000/api/movies/update-movie/${id}`, item)
+			.put('/update-movie/:id', updateMovie)
 			.then((res) => {
+				console.log(res);
 				// res.data
 				props.setItems(res.data);
 				push(`/update-movie/${id}`);
 
-				// res.data ==> just updated item object
+				// res.data ==> just updated updateMovie object
 			})
 			.catch((err) => console.log(err));
 	};
@@ -57,37 +58,37 @@ const UpdateForm = (props) => {
 					name="name"
 					onChange={changeHandler}
 					placeholder="Movie Name"
-					value={item.name}
+					value={updateMovie.name}
 				/>
 
 				<div>
 					<input
 						type="text"
-						name="name"
+						name="director"
 						onChange={changeHandler}
-						placeholder="Movie Name"
-						value={item.name}
+						placeholder="Director's Name"
+						value={updateMovie.director}
 					/>
 				</div>
 				<div>
 					<input
-						type="text"
-						name="name"
+						type="number"
+						name="metascore"
 						onChange={changeHandler}
-						placeholder="Movie Name"
-						value={item.name}
+						placeholder="Metascore"
+						value={updateMovie.metascore}
 					/>
 				</div>
 				<div>
 					<input
-						type="text"
-						name="name"
+						type="array"
+						name="stars"
 						onChange={changeHandler}
-						placeholder="Movie Name"
-						value={item.name}
+						placeholder="Stars"
+						value={updateMovie.stars}
 					/>
 				</div>
-				<button className="md-button">Update</button>
+				<button className="md-button">Update Movie</button>
 			</form>
 		</div>
 	);
