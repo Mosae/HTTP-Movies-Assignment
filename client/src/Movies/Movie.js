@@ -47,7 +47,7 @@ import axios from 'axios';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-function Movie({ addToSavedList }) {
+function Movie({ addToSavedList, deleteMovie }) {
 	const [movie, setMovie] = useState(null);
 	const match = useRouteMatch();
 	const history = useHistory();

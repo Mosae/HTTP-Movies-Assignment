@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import SavedList from './Movies/SavedList';
 import MovieList from './Movies/MovieList';
 import Movie from './Movies/Movie';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import UpdateMovieForm from './Movies/UpdateMovieForm';
 
 const App = (props) => {
+	const history = useHistory();
 	const [savedList, setSavedList] = useState([]);
 	const [movieList, setMovieList] = useState([]);
 
@@ -23,7 +24,7 @@ const App = (props) => {
 	};
 
 	const updateMovieList = (id, updateMovie) => {
-		console.log(updateMovie);
+		console.log('updateMovie in Update movielist', updateMovie);
 
 		const splitMovies = {
 			...updateMovie,
@@ -51,17 +52,19 @@ const App = (props) => {
 	};
 
 	const deleteMovie = (id, updateMovie) => {
-		const splitMovies = {
-			...updateMovie,
-			stars: updateMovie.stars.split(','),
-		};
+		console.log('Delete Update', updateMovie);
+		// const splitMovies = {
+		// 	...updateMovie,
+		// 	stars: updateMovie.stars.split(','),
+		// };
 
 		axios
-			.delete(`http://localhost:5000/api/movies/${id}`, splitMovies)
+			.delete(`http://localhost:5000/api/movies/${id}`)
 			.then((res) => {
-				// console.log(res);
-				setMovieList(res.data);
-				props.history.replace('/');
+				console.log('axios delete', res);
+				//setMovieList(res.data);
+				getMovieList();
+				history.push('/');
 			})
 			.catch((err) => console.log(err));
 	};
