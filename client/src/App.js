@@ -45,7 +45,7 @@ const App = (props) => {
 				});
 				// console.log(movieMatch);
 				setMovieList(movieMatch);
-				props.history.push(`/movies/${id}`);
+				props.push(`/movies/${id}`);
 			})
 			.catch((err) => console.log(err));
 	};
